@@ -1,4 +1,8 @@
+#include "imgui\imgui.h"
+#include "imgui\imgui-SFML.h"
+
 #include <SFML\Graphics.hpp>
+
 #include <iostream>
 #include <cmath>
 
@@ -20,32 +24,31 @@ float d2 = 0.5f;
 float d3 = 0.2f;
 float d4 = 0.005f;
 
+int p1Denom = 6;
+int p2Denom = 2;
+int p3Denom = 6;
+int p4Denom = 2;
+
 // Time
-const float tMax = 1500.0f;
+const float tMax = 2000.0f;
 const float tIncr = 0.01f;
 
 const float EulerConstant = 2.718281f;
 const float Pi = 3.141526f;
 
-int main()
-{
-	sf::RenderWindow window(sf::VideoMode(1000, 1000), "Harmonograph");
-	sf::Event event;
-	sf::View view;
-	view.setCenter(0, 0);
-	view.setSize(1000, 1000);
-	window.setView(view);
+sf::VertexArray points(sf::Points, tMax / tIncr);
 
+void generateHarmonographPoints()
+{
 	// Phase
-	float p1 = Pi / 6;
-	float p2 = Pi / 2;
-	float p3 = Pi / 6;
-	float p4 = Pi / 2;
+	float p1 = Pi / p1Denom;
+	float p2 = Pi / p2Denom;
+	float p3 = Pi / p3Denom;
+	float p4 = Pi / p4Denom;
 
 	// Generate the harmonograph
-	sf::VertexArray points(sf::Points, tMax / tIncr);
 	int currentArrPos = 0;
-	for (float t = 0; t < tMax; t+=tIncr)
+	for (float t = 0; t < tMax; t += tIncr)
 	{
 		// Calculate x(t)
 		float pen1x = a1 * sin((t * f1) + p1) * pow(EulerConstant, -d1 * t);
@@ -64,22 +67,62 @@ int main()
 
 		currentArrPos++;
 	}
+}
 
+int main()
+{
+	sf::RenderWindow window(sf::VideoMode(800, 800), "Harmonograph");
+	sf::Event event;
+	sf::View view;
+	view.setCenter(0, 0);
+	view.setSize(1000, 1000);
+	window.setView(view);
+	ImGui::SFML::Init(window);
+
+	sf::Clock deltaClock;
 	while (window.isOpen())
 	{
 		while (window.pollEvent(event))
 		{
+			ImGui::SFML::ProcessEvent(event);
 			switch (event.type) {
 			case sf::Event::Closed:
 				window.close();
 				break;
 			}
 		}
+		ImGui::SFML::Update(window, deltaClock.restart());
 
-		window.clear(sf::Color::Blue);
+		ImGui::Begin("Parameters");
+		ImGui::SliderFloat("A1", &a1, 0.0f, 100.0f);
+		ImGui::SliderFloat("A2", &a2, 0.0f, 100.0f);
+		ImGui::SliderFloat("A3", &a3, 0.0f, 100.0f);
+		ImGui::SliderFloat("A4", &a4, 0.0f, 100.0f);
+		ImGui::Text("");
+		ImGui::SliderFloat("f1", &f1, 0.0f, 10000.0f);
+		ImGui::SliderFloat("f2", &f2, 0.0f, 10000.0f);
+		ImGui::SliderFloat("f3", &f3, 0.0f, 10000.0f);
+		ImGui::SliderFloat("f4", &f4, 0.0f, 10000.0f);
+		ImGui::Text("");
+		ImGui::SliderFloat("d1", &d1, 0.0f, 1.0f);
+		ImGui::SliderFloat("d2", &d2, 0.0f, 1.0f);
+		ImGui::SliderFloat("d3", &d3, 0.0f, 1.0f);
+		ImGui::SliderFloat("d4", &d4, 0.0f, 1.0f);
+		ImGui::Text("");
+		ImGui::SliderInt("p1", &p1Denom, 1.0f, 10.0f);
+		ImGui::SliderInt("p2", &p2Denom, 1.0f, 10.0f);
+		ImGui::SliderInt("p3", &p3Denom, 1.0f, 10.0f);
+		ImGui::SliderInt("p4", &p4Denom, 1.0f, 10.0f);
+		ImGui::End();
+
+		generateHarmonographPoints();
+
+		window.clear(sf::Color::Black);
 		window.draw(points);
+		ImGui::SFML::Render(window);
 		window.display();
 	}
 
+	ImGui::SFML::Shutdown();
 	return 0;
 }
