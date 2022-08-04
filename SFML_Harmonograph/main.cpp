@@ -93,7 +93,6 @@ int main()
 		}
 		ImGui::SFML::Update(window, deltaClock.restart());
 
-		//TODO: these need to be much more granular to get interesting patterns
 		ImGui::Begin("Parameters");
 		ImGui::SliderFloat("A1", &a1, 0.0f, 400.0f);
 		ImGui::SliderFloat("A2", &a2, 0.0f, 400.0f);
