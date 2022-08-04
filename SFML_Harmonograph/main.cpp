@@ -30,8 +30,8 @@ int p3Denom = 6;
 int p4Denom = 2;
 
 // Time
-const float tMax = 2000.0f;
-const float tIncr = 0.01f;
+float tMax = 100.0f;
+float tIncr = 0.001f;
 
 const float EulerConstant = 2.718281f;
 const float Pi = 3.141526f;
@@ -93,26 +93,30 @@ int main()
 		}
 		ImGui::SFML::Update(window, deltaClock.restart());
 
+		//TODO: these need to be much more granular to get interesting patterns
 		ImGui::Begin("Parameters");
-		ImGui::SliderFloat("A1", &a1, 0.0f, 100.0f);
-		ImGui::SliderFloat("A2", &a2, 0.0f, 100.0f);
-		ImGui::SliderFloat("A3", &a3, 0.0f, 100.0f);
-		ImGui::SliderFloat("A4", &a4, 0.0f, 100.0f);
+		ImGui::SliderFloat("A1", &a1, 0.0f, 400.0f);
+		ImGui::SliderFloat("A2", &a2, 0.0f, 400.0f);
+		ImGui::SliderFloat("A3", &a3, 0.0f, 400.0f);
+		ImGui::SliderFloat("A4", &a4, 0.0f, 400.0f);
 		ImGui::Text("");
-		ImGui::SliderFloat("f1", &f1, 0.0f, 10000.0f);
-		ImGui::SliderFloat("f2", &f2, 0.0f, 10000.0f);
-		ImGui::SliderFloat("f3", &f3, 0.0f, 10000.0f);
-		ImGui::SliderFloat("f4", &f4, 0.0f, 10000.0f);
+		ImGui::SliderFloat("f1", &f1, 0.0f, 40.0f);
+		ImGui::SliderFloat("f2", &f2, 0.0f, 40.0f);
+		ImGui::SliderFloat("f3", &f3, 0.0f, 40.0f);
+		ImGui::SliderFloat("f4", &f4, 0.0f, 40.0f);
 		ImGui::Text("");
-		ImGui::SliderFloat("d1", &d1, 0.0f, 1.0f);
-		ImGui::SliderFloat("d2", &d2, 0.0f, 1.0f);
-		ImGui::SliderFloat("d3", &d3, 0.0f, 1.0f);
-		ImGui::SliderFloat("d4", &d4, 0.0f, 1.0f);
+		ImGui::SliderFloat("d1", &d1, 0.0f, 0.5f);
+		ImGui::SliderFloat("d2", &d2, 0.0f, 0.5f);
+		ImGui::SliderFloat("d3", &d3, 0.0f, 0.5f);
+		ImGui::SliderFloat("d4", &d4, 0.0f, 0.5f);
 		ImGui::Text("");
-		ImGui::SliderInt("p1", &p1Denom, 1.0f, 10.0f);
-		ImGui::SliderInt("p2", &p2Denom, 1.0f, 10.0f);
-		ImGui::SliderInt("p3", &p3Denom, 1.0f, 10.0f);
-		ImGui::SliderInt("p4", &p4Denom, 1.0f, 10.0f);
+		ImGui::SliderInt("p1", &p1Denom, 0.0f, 360.0f);
+		ImGui::SliderInt("p2", &p2Denom, 0.0f, 360.0f);
+		ImGui::SliderInt("p3", &p3Denom, 0.0f, 360.0f);
+		ImGui::SliderInt("p4", &p4Denom, 0.0f, 360.0f);
+		ImGui::Text("");
+		ImGui::SliderFloat("t", &tMax, 1.0f, 100.0f);
+		ImGui::SliderFloat("dt", &tIncr, 0.001f, 1.0f);
 		ImGui::End();
 
 		generateHarmonographPoints();
